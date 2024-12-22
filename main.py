@@ -77,13 +77,18 @@ def check_win(player):
     # Check for diagonal win top left to bottom right
     for row in range(3):
         for col in range(4):
-            start  = row * 7 + col
+            start  = (5 - row) * 7 + col
             if(board[start] == player and
                board[start-6] == player and
                board[start-12] == player and
                board[start-18] == player):
                 return True
     return False
+
+
+def is_board_full():
+    return "." not in board
+
 
 def game_loop():
     for player in ["R"] + ["B","R"] * 42:
@@ -94,8 +99,10 @@ def game_loop():
         if (check_win(player)):
             print("Player " + player + " wins!")
             break
-    else:
-        print("It's a tie!")
+        if is_board_full():
+            display_board()
+            print("It's a tie!")
+            break
 
 
 def main ():
