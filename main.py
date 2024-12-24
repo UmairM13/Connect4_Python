@@ -39,7 +39,7 @@ def take_turn(player):
     if column == -1:
         return False
     drop_piece(column, player)
-    display_board()
+    # display_board()
     return True
 
 def check_win(player):
@@ -106,7 +106,23 @@ def game_loop():
 
 
 def main ():
-    game_loop()
+    try:
+        print("Connect 4!")
+        print("1. Play against another player")
+        print("2. Play against an AI")
+        start = int(input(print("Please select an option (0 to exit): ")))
+        if start == 0:
+            print("Game exited. Thanks for playing!")
+        if start == 1:
+            game_loop()
+        if start == 2: 
+            print("Ai will go here")
+        else:
+            raise ValueError
+    except ValueError:
+        print("Please enter a valid option (1 or 2) or 0 to exit:  ")
+
+    # game_loop()
 
 
 if __name__ == "__main__":
