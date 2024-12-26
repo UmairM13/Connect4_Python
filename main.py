@@ -106,10 +106,11 @@ def game_loop():
 
 
 def main ():
+    print("Connect 4!")
+    print("1. Play against another player")
+    print("2. Play against an AI")
     try:
-        print("Connect 4!")
-        print("1. Play against another player")
-        print("2. Play against an AI")
+        
         start = int(input(print("Please select an option (0 to exit): ")))
         if start == 0:
             print("Game exited. Thanks for playing!")
