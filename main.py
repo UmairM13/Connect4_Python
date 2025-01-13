@@ -24,9 +24,7 @@ def get_player_input():
     while True:
         try:
             column = int(input("Enter a column (1-7) or 0 to exit: "))
-            if column == 0:
-                return -1
-            if column < 1 or column > 7:
+            if column < 0 or column > 7: # col < 0
                 raise ValueError
             if not valid_move(column - 1):
                 raise ValueError
@@ -111,7 +109,8 @@ def main ():
     print("2. Play against an AI")
     try:
         
-        start = int(input(print("Please select an option (0 to exit): ")))
+        print("Please select an option (0 to exit): ")
+        start = int(input())
         if start == 0:
             print("Game exited. Thanks for playing!")
         if start == 1:
