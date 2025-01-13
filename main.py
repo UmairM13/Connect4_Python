@@ -1,5 +1,6 @@
 import random
 import time
+import threading
 
 board = ["."] * 42
 
@@ -137,25 +138,34 @@ def game_loop():
             break
 
 def get_player_input_timeout():
-    start_time = time.time()
-    while True:
-        elapsed_time = time.time() - start_time
-        if elapsed_time > 5:
-            print("\nTime's up!")
-            return -1
+    global player_input
+
+    # This function runs in a separate thread to get player input
+    def input_thread():
+        global player_input
         try:
-            column = int(input(f"Enter a column (1-7) or 0 to exit: "))
-            if column == 0:
-                return -1
-            if column < 1 or column > 7:
-                raise ValueError
-            if not valid_move(column - 1):
-                raise ValueError
-            return column - 1
+            player_input = int(input(f"You have 5 seconds to Enter a column (1-7) or 0 to exit: "))
         except ValueError:
-            print(f"Invalid input. You have {5 - int(elapsed_time)} seconds left.")
+            player_input = -1  
 
+    thread = threading.Thread(target=input_thread)
+    thread.start()
 
+    # Time limit for player input
+    thread.join(5)
+
+    # Check if the thread is still alive after the timeout
+    if thread.is_alive():
+        print("\nTime's up!")
+        return -1 
+    if player_input == 0:
+        return -1
+    if 1 <= player_input <= 7 and valid_move(player_input - 1):
+        return player_input - 1
+    else:
+        print(f"Invalid input.")
+        return -1 
+    
 def game_loop_hard_ai():
     for player in ["R"] + ["B", "R"] * 42:
         display_board()
