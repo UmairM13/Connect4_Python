@@ -1,3 +1,5 @@
+import random
+
 board = ["."] * 42
 
 def display_board():
@@ -88,12 +90,40 @@ def is_board_full():
     return "." not in board
 
 
+def ai_move():
+    while True:
+        column = random.randint(0, 6)
+        if valid_move(column):
+            return column
+        
+
+def game_loop_ai():
+    for player in ["R"] + ["B","R"] * 42:
+        display_board()
+        if player == "R":
+            if not take_turn(player):
+                print("Game exited. Thanks for playing!")
+                break
+        else:
+            column = ai_move()
+            drop_piece(column, player)
+        display_board()
+        if (check_win(player)):
+            print("Player " + player + " wins!")
+            break
+        if is_board_full():
+            display_board()
+            print("It's a tie!")
+            break
+
+
 def game_loop():
     for player in ["R"] + ["B","R"] * 42:
         display_board()
         if not take_turn(player):
             print("Game exited. Thanks for playing!")
             break
+        display_board()
         if (check_win(player)):
             print("Player " + player + " wins!")
             break
@@ -116,7 +146,7 @@ def main ():
         if start == 1:
             game_loop()
         if start == 2: 
-            print("Ai will go here")
+            game_loop_ai()
         else:
             raise ValueError
     except ValueError:
