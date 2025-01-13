@@ -1,4 +1,5 @@
 import random
+import time
 
 board = ["."] * 42
 
@@ -26,7 +27,9 @@ def get_player_input():
     while True:
         try:
             column = int(input("Enter a column (1-7) or 0 to exit: "))
-            if column < 0 or column > 7: # col < 0
+            if column == 0:
+                return -1
+            if column < 1 or column > 7: 
                 raise ValueError
             if not valid_move(column - 1):
                 raise ValueError
@@ -98,6 +101,7 @@ def ai_move():
         
 
 def game_loop_ai():
+
     for player in ["R"] + ["B","R"] * 42:
         display_board()
         if player == "R":
@@ -132,11 +136,52 @@ def game_loop():
             print("It's a tie!")
             break
 
+def get_player_input_timeout():
+    start_time = time.time()
+    while True:
+        elapsed_time = time.time() - start_time
+        if elapsed_time > 5:
+            print("\nTime's up!")
+            return -1
+        try:
+            column = int(input(f"Enter a column (1-7) or 0 to exit: "))
+            if column == 0:
+                return -1
+            if column < 1 or column > 7:
+                raise ValueError
+            if not valid_move(column - 1):
+                raise ValueError
+            return column - 1
+        except ValueError:
+            print(f"Invalid input. You have {5 - int(elapsed_time)} seconds left.")
+
+
+def game_loop_hard_ai():
+    for player in ["R"] + ["B", "R"] * 42:
+        display_board()
+        if player == "R":
+            column = get_player_input_timeout()
+            if column == -1:  
+                break
+            drop_piece(column, player)
+        else:
+            column = ai_move()
+            drop_piece(column, player)
+        display_board()
+        if check_win(player):
+            print(f"Player {player} wins!")
+            break
+        if is_board_full():
+            display_board()
+            print("It's a tie!")
+            break
+
 
 def main ():
     print("Connect 4!")
     print("1. Play against another player")
     print("2. Play against an AI")
+    print("3. Play against a harder AI with timed player moves")
     try:
         
         print("Please select an option (0 to exit): ")
@@ -147,6 +192,8 @@ def main ():
             game_loop()
         if start == 2: 
             game_loop_ai()
+        if start == 3:
+            game_loop_hard_ai()
         else:
             raise ValueError
     except ValueError:
