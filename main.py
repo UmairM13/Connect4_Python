@@ -2,8 +2,11 @@ import random
 import time
 import threading
 
+# initialize the board as global variable so 
+# that it can be accessed by all functions
 board = ["."] * 42
 
+# loops through each column and displays the board
 def display_board():
     for i in range(0, 42, 7):
         print(" ".join(board[i:i+7]))
@@ -17,7 +20,8 @@ def valid_move(column):
         return False
     return True
 
-
+## checks if the column is full 
+## if the column is full, the player cannot drop a piece in that column
 def drop_piece(column, player):
     for i in range(5, -1, -1):
         if board[column + i * 7] == ".":
@@ -48,7 +52,11 @@ def take_turn(player):
 
 def check_win(player):
 
-    # Check for vertical win
+    # Check for horizontal win
+    # checks for 4 consecutive pieces in a row across the horizontal axis
+    # it can do this because the board is a 1D array and 
+    # the pieces are dropped in the board from top to bottom
+    # so the pieces are placed in the board in a left to right manner
     for row in range(6):
         for col in range(4):
             start  = row * 7 + col
@@ -58,7 +66,11 @@ def check_win(player):
                board[start+3] == player):
                 return True
     
-    # Check for horizontal win
+    # Check for vertical win
+    # does the same as the horizontal win but checks for 4 consecutive pieces in a column
+    # it is plus 7 because it is checking for the next piece in the column
+    # so if our first piece is at position 1 the piece directly above it is
+    # at position 1 + 7 = 8
     for row in range(3):
         for col in range(7):
             start  = row * 7 + col
@@ -69,6 +81,12 @@ def check_win(player):
                 return True
             
     # Check for diagonal win bottom left to top right
+    # diagonal win is a bit more complex but essentially works the same as 
+    # the vertical win. 
+    # it is the same but it will be + (7 + 1) each time 
+    # because it is checking for the next piece in the diagonal
+    # so if we at position 1 the diagnol piece is at postion 1 + 8 = 9
+    # and the next one will be at 9 + 8 = 17
     for row in range(3):
         for col in range(4):
             start  = row * 7 + col
@@ -79,6 +97,7 @@ def check_win(player):
                 return True
             
     # Check for diagonal win top left to bottom right
+    # works the same as the bottom left to top right but in the opposite direction
     for row in range(3):
         for col in range(4):
             start  = (5 - row) * 7 + col
@@ -93,14 +112,16 @@ def check_win(player):
 def is_board_full():
     return "." not in board
 
-
+# generates a random move for the AI 
 def ai_move():
     while True:
         column = random.randint(0, 6)
         if valid_move(column):
             return column
         
-
+## This is the game loop for the ai function
+## it works the same as the game loop for the player
+# but instead of getting input from a player it calls the above ai_move function
 def game_loop_ai():
 
     for player in ["R"] + ["B","R"] * 42:
@@ -121,7 +142,9 @@ def game_loop_ai():
             print("It's a tie!")
             break
 
-
+# this is the normal game loop function
+# it takes input from the player and checks if the player has won
+# calling the previous functions we have
 def game_loop():
     for player in ["R"] + ["B","R"] * 42:
         display_board()
@@ -137,6 +160,10 @@ def game_loop():
             print("It's a tie!")
             break
 
+
+# This function gets player input with a time limit
+# it uses threading so that it can get the input in the console live
+# and not have to wait for the player to press enter
 def get_player_input_timeout():
     global player_input
 
@@ -165,7 +192,12 @@ def get_player_input_timeout():
     else:
         print(f"Invalid input.")
         return -1 
-    
+
+
+# This is the game loop for the harder AI
+# it works the same as the game loop for the player
+# but instead of getting input from a player it calls the above get_player_input_timeout function 
+# and also the ai_move function
 def game_loop_hard_ai():
     for player in ["R"] + ["B", "R"] * 42:
         display_board()
