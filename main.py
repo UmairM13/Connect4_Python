@@ -55,6 +55,9 @@ def check_win(player):
     # Check for horizontal win
     # checks for 4 consecutive pieces in a row across the horizontal axis
     # it can do this because the board is a 1D array and 
+    # It loops through each of the six rows of the board
+    # Only loops through the next 4 columns to ensure that a win is possible
+    # Start calculates the index of the current position
     # the pieces are dropped in the board from top to bottom
     # so the pieces are placed in the board in a left to right manner
     for row in range(6):
