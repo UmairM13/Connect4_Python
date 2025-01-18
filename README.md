@@ -1,6 +1,6 @@
 # Connect Four - Python
 
-This is Connect Four game implemented in Python. THe game allows players to play against each other or against an AI. The AI can either be a basic random AI or a harder AI that includes a time limit for player moves.
+This is Connect Four game implemented in Python following a procedural approach. THe game allows players to play against each other or against an AI. The AI can either be a basic random AI or a harder AI that includes a time limit for player moves.
 
 ---
 
